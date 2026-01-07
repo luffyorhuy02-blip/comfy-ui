@@ -1,0 +1,482 @@
+{
+    "last_node_id": 12,
+    "last_link_id": 15,
+    "nodes": [
+        {
+            "id": 1,
+            "type": "UNETLoader",
+            "pos": [
+                50,
+                100
+            ],
+            "size": [
+                315,
+                58
+            ],
+            "flags": {},
+            "order": 0,
+            "mode": 0,
+            "outputs": [
+                {
+                    "name": "MODEL",
+                    "type": "MODEL",
+                    "links": [
+                        1
+                    ],
+                    "slot_index": 0
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "UNETLoader"
+            },
+            "widgets_values": [
+                "flux1-dev.safetensors",
+                "fp8_e4m3fn"
+            ],
+            "title": "🎯 FLUX Model"
+        },
+        {
+            "id": 2,
+            "type": "LoraLoader",
+            "pos": [
+                50,
+                200
+            ],
+            "size": [
+                315,
+                126
+            ],
+            "flags": {},
+            "order": 1,
+            "mode": 0,
+            "inputs": [
+                {
+                    "name": "model",
+                    "type": "MODEL",
+                    "link": 1
+                },
+                {
+                    "name": "clip",
+                    "type": "CLIP",
+                    "link": null
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "MODEL",
+                    "type": "MODEL",
+                    "links": [
+                        2
+                    ],
+                    "slot_index": 0
+                },
+                {
+                    "name": "CLIP",
+                    "type": "CLIP",
+                    "links": null,
+                    "slot_index": 1
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "LoraLoader"
+            },
+            "widgets_values": [
+                "Hyper-FLUX.1-dev-8steps-lora.safetensors",
+                0.125,
+                1.0
+            ],
+            "title": "⚡ Hyper-FLUX 8-Steps LoRA"
+        },
+        {
+            "id": 3,
+            "type": "DualCLIPLoader",
+            "pos": [
+                50,
+                380
+            ],
+            "size": [
+                315,
+                106
+            ],
+            "flags": {},
+            "order": 2,
+            "mode": 0,
+            "outputs": [
+                {
+                    "name": "CLIP",
+                    "type": "CLIP",
+                    "links": [
+                        3
+                    ],
+                    "slot_index": 0
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "DualCLIPLoader"
+            },
+            "widgets_values": [
+                "t5xxl_fp8_e4m3fn.safetensors",
+                "clip_l.safetensors",
+                "flux"
+            ],
+            "title": "📝 CLIP Loaders"
+        },
+        {
+            "id": 4,
+            "type": "VAELoader",
+            "pos": [
+                50,
+                530
+            ],
+            "size": [
+                315,
+                58
+            ],
+            "flags": {},
+            "order": 3,
+            "mode": 0,
+            "outputs": [
+                {
+                    "name": "VAE",
+                    "type": "VAE",
+                    "links": [
+                        4
+                    ],
+                    "slot_index": 0
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "VAELoader"
+            },
+            "widgets_values": [
+                "ae.safetensors"
+            ],
+            "title": "🎨 FLUX VAE"
+        },
+        {
+            "id": 5,
+            "type": "CLIPTextEncode",
+            "pos": [
+                450,
+                100
+            ],
+            "size": [
+                400,
+                180
+            ],
+            "flags": {},
+            "order": 4,
+            "mode": 0,
+            "inputs": [
+                {
+                    "name": "clip",
+                    "type": "CLIP",
+                    "link": 3
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "CONDITIONING",
+                    "type": "CONDITIONING",
+                    "links": [
+                        5
+                    ],
+                    "slot_index": 0
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "CLIPTextEncode"
+            },
+            "widgets_values": [
+                "a beautiful young woman with flowing hair, professional portrait photography, soft natural lighting, sharp focus, 8k, highly detailed skin texture, realistic"
+            ],
+            "title": "✅ Positive Prompt"
+        },
+        {
+            "id": 6,
+            "type": "EmptySD3LatentImage",
+            "pos": [
+                450,
+                350
+            ],
+            "size": [
+                315,
+                106
+            ],
+            "flags": {},
+            "order": 5,
+            "mode": 0,
+            "outputs": [
+                {
+                    "name": "LATENT",
+                    "type": "LATENT",
+                    "links": [
+                        6
+                    ],
+                    "slot_index": 0
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "EmptySD3LatentImage"
+            },
+            "widgets_values": [
+                1024,
+                1024,
+                1
+            ],
+            "title": "📐 Image Size (1024x1024)"
+        },
+        {
+            "id": 7,
+            "type": "KSampler",
+            "pos": [
+                900,
+                100
+            ],
+            "size": [
+                315,
+                262
+            ],
+            "flags": {},
+            "order": 6,
+            "mode": 0,
+            "inputs": [
+                {
+                    "name": "model",
+                    "type": "MODEL",
+                    "link": 2
+                },
+                {
+                    "name": "positive",
+                    "type": "CONDITIONING",
+                    "link": 5
+                },
+                {
+                    "name": "negative",
+                    "type": "CONDITIONING",
+                    "link": null
+                },
+                {
+                    "name": "latent_image",
+                    "type": "LATENT",
+                    "link": 6
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "LATENT",
+                    "type": "LATENT",
+                    "links": [
+                        7
+                    ],
+                    "slot_index": 0
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "KSampler"
+            },
+            "widgets_values": [
+                123456789,
+                "randomize",
+                8,
+                1.0,
+                "euler",
+                "simple",
+                1.0
+            ],
+            "title": "⚡ Sampler (8 STEPS ONLY!)"
+        },
+        {
+            "id": 8,
+            "type": "VAEDecode",
+            "pos": [
+                1280,
+                100
+            ],
+            "size": [
+                210,
+                46
+            ],
+            "flags": {},
+            "order": 7,
+            "mode": 0,
+            "inputs": [
+                {
+                    "name": "samples",
+                    "type": "LATENT",
+                    "link": 7
+                },
+                {
+                    "name": "vae",
+                    "type": "VAE",
+                    "link": 4
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "IMAGE",
+                    "type": "IMAGE",
+                    "links": [
+                        8
+                    ],
+                    "slot_index": 0
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "VAEDecode"
+            }
+        },
+        {
+            "id": 9,
+            "type": "SaveImage",
+            "pos": [
+                1280,
+                200
+            ],
+            "size": [
+                315,
+                270
+            ],
+            "flags": {},
+            "order": 8,
+            "mode": 0,
+            "inputs": [
+                {
+                    "name": "images",
+                    "type": "IMAGE",
+                    "link": 8
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "SaveImage"
+            },
+            "widgets_values": [
+                "HyperFLUX"
+            ],
+            "title": "💾 Save Image"
+        }
+    ],
+    "links": [
+        [
+            1,
+            1,
+            0,
+            2,
+            0,
+            "MODEL"
+        ],
+        [
+            2,
+            2,
+            0,
+            7,
+            0,
+            "MODEL"
+        ],
+        [
+            3,
+            3,
+            0,
+            5,
+            0,
+            "CLIP"
+        ],
+        [
+            4,
+            4,
+            0,
+            8,
+            1,
+            "VAE"
+        ],
+        [
+            5,
+            5,
+            0,
+            7,
+            1,
+            "CONDITIONING"
+        ],
+        [
+            6,
+            6,
+            0,
+            7,
+            3,
+            "LATENT"
+        ],
+        [
+            7,
+            7,
+            0,
+            8,
+            0,
+            "LATENT"
+        ],
+        [
+            8,
+            8,
+            0,
+            9,
+            0,
+            "IMAGE"
+        ]
+    ],
+    "groups": [
+        {
+            "title": "📦 FLUX MODELS",
+            "bounding": [
+                40,
+                70,
+                350,
+                540
+            ],
+            "color": "#8B5CF6"
+        },
+        {
+            "title": "📝 PROMPT",
+            "bounding": [
+                440,
+                70,
+                420,
+                220
+            ],
+            "color": "#3f789e"
+        },
+        {
+            "title": "⚡ 8-STEP GENERATION",
+            "bounding": [
+                890,
+                70,
+                350,
+                230
+            ],
+            "color": "#F59E0B"
+        },
+        {
+            "title": "💾 OUTPUT",
+            "bounding": [
+                1270,
+                170,
+                350,
+                320
+            ],
+            "color": "#10B981"
+        }
+    ],
+    "config": {},
+    "extra": {
+        "info": {
+            "name": "Hyper-FLUX 8-Steps",
+            "author": "ComfyUI Colab",
+            "description": "Ultra-fast FLUX generation with only 8 steps using Hyper-FLUX LoRA",
+            "notes": [
+                "LoRA strength: 0.125 (recommended for 8 steps)",
+                "CFG: 1.0 (FLUX works best with low CFG)",
+                "Sampler: euler + simple scheduler",
+                "No negative prompt needed for FLUX"
+            ]
+        }
+    },
+    "version": 0.4
+}

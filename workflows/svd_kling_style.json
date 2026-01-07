@@ -1,0 +1,476 @@
+{
+    "last_node_id": 8,
+    "last_link_id": 8,
+    "nodes": [
+        {
+            "id": 1,
+            "type": "ImageOnlyCheckpointLoader",
+            "pos": [
+                50,
+                100
+            ],
+            "size": [
+                315,
+                98
+            ],
+            "flags": {},
+            "order": 0,
+            "mode": 0,
+            "outputs": [
+                {
+                    "name": "MODEL",
+                    "type": "MODEL",
+                    "links": [
+                        1
+                    ],
+                    "slot_index": 0
+                },
+                {
+                    "name": "CLIP_VISION",
+                    "type": "CLIP_VISION",
+                    "links": [
+                        2
+                    ],
+                    "slot_index": 1
+                },
+                {
+                    "name": "VAE",
+                    "type": "VAE",
+                    "links": [
+                        3
+                    ],
+                    "slot_index": 2
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "ImageOnlyCheckpointLoader"
+            },
+            "widgets_values": [
+                "svd_xt_1_1.safetensors"
+            ],
+            "title": "🎯 SVD Model (Stable Video Diffusion)"
+        },
+        {
+            "id": 2,
+            "type": "LoadImage",
+            "pos": [
+                50,
+                250
+            ],
+            "size": [
+                315,
+                314
+            ],
+            "flags": {},
+            "order": 1,
+            "mode": 0,
+            "outputs": [
+                {
+                    "name": "IMAGE",
+                    "type": "IMAGE",
+                    "links": [
+                        4
+                    ],
+                    "slot_index": 0
+                },
+                {
+                    "name": "MASK",
+                    "type": "MASK",
+                    "links": null
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "LoadImage"
+            },
+            "widgets_values": [
+                "your_image.png",
+                "image"
+            ],
+            "title": "📷 Upload Image (1024x576 best)"
+        },
+        {
+            "id": 3,
+            "type": "SVD_img2vid_Conditioning",
+            "pos": [
+                450,
+                100
+            ],
+            "size": [
+                315,
+                200
+            ],
+            "flags": {},
+            "order": 2,
+            "mode": 0,
+            "inputs": [
+                {
+                    "name": "clip_vision",
+                    "type": "CLIP_VISION",
+                    "link": 2
+                },
+                {
+                    "name": "init_image",
+                    "type": "IMAGE",
+                    "link": 4
+                },
+                {
+                    "name": "vae",
+                    "type": "VAE",
+                    "link": 3
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "positive",
+                    "type": "CONDITIONING",
+                    "links": [
+                        5
+                    ],
+                    "slot_index": 0
+                },
+                {
+                    "name": "negative",
+                    "type": "CONDITIONING",
+                    "links": [
+                        6
+                    ],
+                    "slot_index": 1
+                },
+                {
+                    "name": "latent",
+                    "type": "LATENT",
+                    "links": [
+                        7
+                    ],
+                    "slot_index": 2
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "SVD_img2vid_Conditioning"
+            },
+            "widgets_values": [
+                1024,
+                576,
+                25,
+                127,
+                6,
+                0.02
+            ],
+            "title": "🎬 SVD Conditioning"
+        },
+        {
+            "id": 4,
+            "type": "KSampler",
+            "pos": [
+                830,
+                100
+            ],
+            "size": [
+                315,
+                262
+            ],
+            "flags": {},
+            "order": 3,
+            "mode": 0,
+            "inputs": [
+                {
+                    "name": "model",
+                    "type": "MODEL",
+                    "link": 1
+                },
+                {
+                    "name": "positive",
+                    "type": "CONDITIONING",
+                    "link": 5
+                },
+                {
+                    "name": "negative",
+                    "type": "CONDITIONING",
+                    "link": 6
+                },
+                {
+                    "name": "latent_image",
+                    "type": "LATENT",
+                    "link": 7
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "LATENT",
+                    "type": "LATENT",
+                    "links": [
+                        8
+                    ],
+                    "slot_index": 0
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "KSampler"
+            },
+            "widgets_values": [
+                12345,
+                "randomize",
+                20,
+                2.5,
+                "euler",
+                "karras",
+                1.0
+            ],
+            "title": "🎲 Sampler (CFG 2.5)"
+        },
+        {
+            "id": 5,
+            "type": "VAEDecode",
+            "pos": [
+                1210,
+                100
+            ],
+            "size": [
+                210,
+                46
+            ],
+            "flags": {},
+            "order": 4,
+            "mode": 0,
+            "inputs": [
+                {
+                    "name": "samples",
+                    "type": "LATENT",
+                    "link": 8
+                },
+                {
+                    "name": "vae",
+                    "type": "VAE",
+                    "link": 3
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "IMAGE",
+                    "type": "IMAGE",
+                    "links": [
+                        9,
+                        10
+                    ],
+                    "slot_index": 0
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "VAEDecode"
+            }
+        },
+        {
+            "id": 6,
+            "type": "VHS_VideoCombine",
+            "pos": [
+                1210,
+                200
+            ],
+            "size": [
+                400,
+                350
+            ],
+            "flags": {},
+            "order": 5,
+            "mode": 0,
+            "inputs": [
+                {
+                    "name": "images",
+                    "type": "IMAGE",
+                    "link": 9
+                },
+                {
+                    "name": "audio",
+                    "type": "AUDIO",
+                    "link": null
+                },
+                {
+                    "name": "meta_batch",
+                    "type": "VHS_BatchManager",
+                    "link": null
+                },
+                {
+                    "name": "vae",
+                    "type": "VAE",
+                    "link": null
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "Filenames",
+                    "type": "VHS_FILENAMES",
+                    "links": null
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "VHS_VideoCombine"
+            },
+            "title": "🎬 Save MP4"
+        },
+        {
+            "id": 7,
+            "type": "PreviewImage",
+            "pos": [
+                1650,
+                100
+            ],
+            "size": [
+                400,
+                350
+            ],
+            "flags": {},
+            "order": 6,
+            "mode": 0,
+            "inputs": [
+                {
+                    "name": "images",
+                    "type": "IMAGE",
+                    "link": 10
+                }
+            ],
+            "title": "👁️ Preview Frames"
+        }
+    ],
+    "links": [
+        [
+            1,
+            1,
+            0,
+            4,
+            0,
+            "MODEL"
+        ],
+        [
+            2,
+            1,
+            1,
+            3,
+            0,
+            "CLIP_VISION"
+        ],
+        [
+            3,
+            1,
+            2,
+            3,
+            2,
+            "VAE"
+        ],
+        [
+            4,
+            2,
+            0,
+            3,
+            1,
+            "IMAGE"
+        ],
+        [
+            5,
+            3,
+            0,
+            4,
+            1,
+            "CONDITIONING"
+        ],
+        [
+            6,
+            3,
+            1,
+            4,
+            2,
+            "CONDITIONING"
+        ],
+        [
+            7,
+            3,
+            2,
+            4,
+            3,
+            "LATENT"
+        ],
+        [
+            8,
+            4,
+            0,
+            5,
+            0,
+            "LATENT"
+        ],
+        [
+            9,
+            5,
+            0,
+            6,
+            0,
+            "IMAGE"
+        ],
+        [
+            10,
+            5,
+            0,
+            7,
+            0,
+            "IMAGE"
+        ]
+    ],
+    "groups": [
+        {
+            "title": "📦 SVD MODEL",
+            "bounding": [
+                40,
+                70,
+                350,
+                210
+            ],
+            "color": "#8B5CF6"
+        },
+        {
+            "title": "📷 INPUT",
+            "bounding": [
+                40,
+                220,
+                350,
+                360
+            ],
+            "color": "#F59E0B"
+        },
+        {
+            "title": "🎬 SVD PROCESS",
+            "bounding": [
+                440,
+                70,
+                350,
+                270
+            ],
+            "color": "#EC4899"
+        },
+        {
+            "title": "🎥 OUTPUT",
+            "bounding": [
+                1200,
+                70,
+                450,
+                500
+            ],
+            "color": "#10B981"
+        }
+    ],
+    "config": {},
+    "extra": {
+        "info": {
+            "name": "Stable Video Diffusion (Kling AI Style)",
+            "description": "Generate video from image using SVD - similar to Kling AI",
+            "model_required": "svd_xt_1_1.safetensors",
+            "download": "https://huggingface.co/stabilityai/stable-video-diffusion-img2vid-xt-1-1",
+            "settings": {
+                "video_frames": 25,
+                "motion_bucket_id": "127 (cao = nhiều motion)",
+                "fps": "6-8",
+                "augmentation_level": "0.02",
+                "cfg": "2.5 (SVD cần CFG thấp)"
+            },
+            "image_size": "1024x576 hoặc 576x1024 (16:9)"
+        }
+    },
+    "version": 0.4
+}

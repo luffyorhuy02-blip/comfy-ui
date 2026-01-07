@@ -1,0 +1,343 @@
+{
+    "last_node_id": 10,
+    "last_link_id": 12,
+    "nodes": [
+        {
+            "id": 1,
+            "type": "CheckpointLoaderSimple",
+            "pos": [
+                50,
+                50
+            ],
+            "size": [
+                315,
+                98
+            ],
+            "flags": {},
+            "order": 0,
+            "mode": 0,
+            "outputs": [
+                {
+                    "name": "MODEL",
+                    "type": "MODEL",
+                    "links": [
+                        1
+                    ],
+                    "slot_index": 0
+                },
+                {
+                    "name": "CLIP",
+                    "type": "CLIP",
+                    "links": [
+                        2,
+                        3
+                    ],
+                    "slot_index": 1
+                },
+                {
+                    "name": "VAE",
+                    "type": "VAE",
+                    "links": [
+                        4
+                    ],
+                    "slot_index": 2
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "CheckpointLoaderSimple"
+            },
+            "widgets_values": [
+                "sd_xl_base_1.0.safetensors"
+            ],
+            "title": "🎯 Model"
+        },
+        {
+            "id": 2,
+            "type": "LoadImage",
+            "pos": [
+                50,
+                200
+            ],
+            "size": [
+                315,
+                314
+            ],
+            "flags": {},
+            "order": 1,
+            "mode": 0,
+            "outputs": [
+                {
+                    "name": "IMAGE",
+                    "type": "IMAGE",
+                    "links": [
+                        10
+                    ],
+                    "slot_index": 0
+                },
+                {
+                    "name": "MASK",
+                    "type": "MASK",
+                    "links": null
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "LoadImage"
+            },
+            "widgets_values": [
+                "source_face.png",
+                "image"
+            ],
+            "title": "👤 Source Face (để swap)"
+        },
+        {
+            "id": 3,
+            "type": "LoadImage",
+            "pos": [
+                50,
+                560
+            ],
+            "size": [
+                315,
+                314
+            ],
+            "flags": {},
+            "order": 2,
+            "mode": 0,
+            "outputs": [
+                {
+                    "name": "IMAGE",
+                    "type": "IMAGE",
+                    "links": [
+                        11
+                    ],
+                    "slot_index": 0
+                },
+                {
+                    "name": "MASK",
+                    "type": "MASK",
+                    "links": null
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "LoadImage"
+            },
+            "widgets_values": [
+                "target_image.png",
+                "image"
+            ],
+            "title": "🎯 Target Image (ảnh muốn đổi mặt)"
+        },
+        {
+            "id": 4,
+            "type": "ReActorFaceSwap",
+            "pos": [
+                450,
+                300
+            ],
+            "size": [
+                315,
+                290
+            ],
+            "flags": {},
+            "order": 3,
+            "mode": 0,
+            "inputs": [
+                {
+                    "name": "source_image",
+                    "type": "IMAGE",
+                    "link": 10
+                },
+                {
+                    "name": "input_image",
+                    "type": "IMAGE",
+                    "link": 11
+                },
+                {
+                    "name": "face_model",
+                    "type": "FACE_MODEL",
+                    "link": null
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "IMAGE",
+                    "type": "IMAGE",
+                    "links": [
+                        12
+                    ],
+                    "slot_index": 0
+                },
+                {
+                    "name": "FACE_MODEL",
+                    "type": "FACE_MODEL",
+                    "links": null
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "ReActorFaceSwap"
+            },
+            "widgets_values": [
+                true,
+                "inswapper_128.onnx",
+                "retinaface_resnet50",
+                "GFPGANv1.4.pth",
+                1.0,
+                1,
+                "no",
+                "no",
+                "no",
+                0,
+                1,
+                "0",
+                "0",
+                0.5
+            ],
+            "title": "🔄 Face Swap (Reactor)"
+        },
+        {
+            "id": 5,
+            "type": "SaveImage",
+            "pos": [
+                830,
+                300
+            ],
+            "size": [
+                315,
+                270
+            ],
+            "flags": {},
+            "order": 4,
+            "mode": 0,
+            "inputs": [
+                {
+                    "name": "images",
+                    "type": "IMAGE",
+                    "link": 12
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "SaveImage"
+            },
+            "widgets_values": [
+                "FaceSwap_Output"
+            ],
+            "title": "💾 Save Result"
+        }
+    ],
+    "links": [
+        [
+            1,
+            1,
+            0,
+            4,
+            0,
+            "MODEL"
+        ],
+        [
+            2,
+            1,
+            1,
+            4,
+            0,
+            "CLIP"
+        ],
+        [
+            3,
+            1,
+            1,
+            4,
+            0,
+            "CLIP"
+        ],
+        [
+            4,
+            1,
+            2,
+            4,
+            0,
+            "VAE"
+        ],
+        [
+            10,
+            2,
+            0,
+            4,
+            0,
+            "IMAGE"
+        ],
+        [
+            11,
+            3,
+            0,
+            4,
+            1,
+            "IMAGE"
+        ],
+        [
+            12,
+            4,
+            0,
+            5,
+            0,
+            "IMAGE"
+        ]
+    ],
+    "groups": [
+        {
+            "title": "👤 SOURCE FACE",
+            "bounding": [
+                40,
+                170,
+                350,
+                360
+            ],
+            "color": "#3B82F6"
+        },
+        {
+            "title": "🎯 TARGET IMAGE",
+            "bounding": [
+                40,
+                530,
+                350,
+                360
+            ],
+            "color": "#F59E0B"
+        },
+        {
+            "title": "🔄 FACE SWAP",
+            "bounding": [
+                440,
+                270,
+                350,
+                330
+            ],
+            "color": "#8B5CF6"
+        },
+        {
+            "title": "💾 OUTPUT",
+            "bounding": [
+                820,
+                270,
+                350,
+                330
+            ],
+            "color": "#10B981"
+        }
+    ],
+    "config": {},
+    "extra": {
+        "info": {
+            "name": "Face Swap (Reactor)",
+            "description": "Swap faces between images using Reactor node",
+            "requirements": [
+                "Reactor node: comfyui-reactor-node",
+                "Models: inswapper_128.onnx, GFPGANv1.4.pth"
+            ],
+            "models_path": {
+                "inswapper": "models/insightface/inswapper_128.onnx",
+                "gfpgan": "models/facerestore_models/GFPGANv1.4.pth"
+            }
+        }
+    },
+    "version": 0.4
+}

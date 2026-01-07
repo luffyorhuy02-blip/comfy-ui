@@ -1,0 +1,617 @@
+{
+    "last_node_id": 12,
+    "last_link_id": 15,
+    "nodes": [
+        {
+            "id": 1,
+            "type": "VHS_LoadVideo",
+            "pos": [
+                50,
+                100
+            ],
+            "size": [
+                315,
+                290
+            ],
+            "flags": {},
+            "order": 0,
+            "mode": 0,
+            "outputs": [
+                {
+                    "name": "IMAGE",
+                    "type": "IMAGE",
+                    "links": [
+                        1
+                    ],
+                    "slot_index": 0
+                },
+                {
+                    "name": "frame_count",
+                    "type": "INT",
+                    "links": null
+                },
+                {
+                    "name": "audio",
+                    "type": "VHS_AUDIO",
+                    "links": [
+                        10
+                    ],
+                    "slot_index": 2
+                },
+                {
+                    "name": "video_info",
+                    "type": "VHS_VIDEOINFO",
+                    "links": null
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "VHS_LoadVideo"
+            },
+            "widgets_values": [
+                "input_video.mp4",
+                "Uploaded video",
+                0,
+                false,
+                24,
+                0,
+                64,
+                "Disabled"
+            ],
+            "title": "📹 Load Video"
+        },
+        {
+            "id": 2,
+            "type": "CheckpointLoaderSimple",
+            "pos": [
+                50,
+                440
+            ],
+            "size": [
+                315,
+                98
+            ],
+            "flags": {},
+            "order": 1,
+            "mode": 0,
+            "outputs": [
+                {
+                    "name": "MODEL",
+                    "type": "MODEL",
+                    "links": [
+                        2
+                    ],
+                    "slot_index": 0
+                },
+                {
+                    "name": "CLIP",
+                    "type": "CLIP",
+                    "links": [
+                        3,
+                        4
+                    ],
+                    "slot_index": 1
+                },
+                {
+                    "name": "VAE",
+                    "type": "VAE",
+                    "links": [
+                        5
+                    ],
+                    "slot_index": 2
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "CheckpointLoaderSimple"
+            },
+            "widgets_values": [
+                "v1-5-pruned-emaonly.safetensors"
+            ],
+            "title": "🎯 SD 1.5 Model"
+        },
+        {
+            "id": 3,
+            "type": "ADE_LoadAnimateDiffModel",
+            "pos": [
+                50,
+                590
+            ],
+            "size": [
+                315,
+                58
+            ],
+            "flags": {},
+            "order": 2,
+            "mode": 0,
+            "outputs": [
+                {
+                    "name": "MOTION_MODEL",
+                    "type": "MOTION_MODEL_ADE",
+                    "links": [
+                        11
+                    ],
+                    "slot_index": 0
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "ADE_LoadAnimateDiffModel"
+            },
+            "widgets_values": [
+                "v3_sd15_mm.ckpt"
+            ],
+            "title": "🎬 Motion Model"
+        },
+        {
+            "id": 4,
+            "type": "ADE_ApplyAnimateDiffModelSimple",
+            "pos": [
+                50,
+                700
+            ],
+            "size": [
+                315,
+                58
+            ],
+            "flags": {},
+            "order": 3,
+            "mode": 0,
+            "inputs": [
+                {
+                    "name": "motion_model",
+                    "type": "MOTION_MODEL_ADE",
+                    "link": 11
+                },
+                {
+                    "name": "model",
+                    "type": "MODEL",
+                    "link": 2
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "MODEL",
+                    "type": "MODEL",
+                    "links": [
+                        12
+                    ],
+                    "slot_index": 0
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "ADE_ApplyAnimateDiffModelSimple"
+            },
+            "title": "🔗 Apply AnimateDiff"
+        },
+        {
+            "id": 5,
+            "type": "VAEEncode",
+            "pos": [
+                420,
+                150
+            ],
+            "size": [
+                210,
+                46
+            ],
+            "flags": {},
+            "order": 4,
+            "mode": 0,
+            "inputs": [
+                {
+                    "name": "pixels",
+                    "type": "IMAGE",
+                    "link": 1
+                },
+                {
+                    "name": "vae",
+                    "type": "VAE",
+                    "link": 5
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "LATENT",
+                    "type": "LATENT",
+                    "links": [
+                        6
+                    ],
+                    "slot_index": 0
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "VAEEncode"
+            },
+            "title": "🔄 Encode Video"
+        },
+        {
+            "id": 6,
+            "type": "CLIPTextEncode",
+            "pos": [
+                420,
+                250
+            ],
+            "size": [
+                400,
+                120
+            ],
+            "flags": {},
+            "order": 5,
+            "mode": 0,
+            "inputs": [
+                {
+                    "name": "clip",
+                    "type": "CLIP",
+                    "link": 3
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "CONDITIONING",
+                    "type": "CONDITIONING",
+                    "links": [
+                        7
+                    ],
+                    "slot_index": 0
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "CLIPTextEncode"
+            },
+            "widgets_values": [
+                "anime style, vibrant colors, smooth animation, detailed, masterpiece"
+            ],
+            "title": "✅ Style Prompt"
+        },
+        {
+            "id": 7,
+            "type": "CLIPTextEncode",
+            "pos": [
+                420,
+                400
+            ],
+            "size": [
+                400,
+                80
+            ],
+            "flags": {},
+            "order": 6,
+            "mode": 0,
+            "inputs": [
+                {
+                    "name": "clip",
+                    "type": "CLIP",
+                    "link": 4
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "CONDITIONING",
+                    "type": "CONDITIONING",
+                    "links": [
+                        8
+                    ],
+                    "slot_index": 0
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "CLIPTextEncode"
+            },
+            "widgets_values": [
+                "ugly, blurry, low quality"
+            ],
+            "title": "❌ Negative"
+        },
+        {
+            "id": 8,
+            "type": "KSampler",
+            "pos": [
+                880,
+                200
+            ],
+            "size": [
+                315,
+                262
+            ],
+            "flags": {},
+            "order": 7,
+            "mode": 0,
+            "inputs": [
+                {
+                    "name": "model",
+                    "type": "MODEL",
+                    "link": 12
+                },
+                {
+                    "name": "positive",
+                    "type": "CONDITIONING",
+                    "link": 7
+                },
+                {
+                    "name": "negative",
+                    "type": "CONDITIONING",
+                    "link": 8
+                },
+                {
+                    "name": "latent_image",
+                    "type": "LATENT",
+                    "link": 6
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "LATENT",
+                    "type": "LATENT",
+                    "links": [
+                        9
+                    ],
+                    "slot_index": 0
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "KSampler"
+            },
+            "widgets_values": [
+                123456,
+                "randomize",
+                20,
+                7.0,
+                "euler_ancestral",
+                "normal",
+                0.5
+            ],
+            "title": "🎲 Sampler (denoise 0.5)"
+        },
+        {
+            "id": 9,
+            "type": "VAEDecode",
+            "pos": [
+                1260,
+                200
+            ],
+            "size": [
+                210,
+                46
+            ],
+            "flags": {},
+            "order": 8,
+            "mode": 0,
+            "inputs": [
+                {
+                    "name": "samples",
+                    "type": "LATENT",
+                    "link": 9
+                },
+                {
+                    "name": "vae",
+                    "type": "VAE",
+                    "link": null
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "IMAGE",
+                    "type": "IMAGE",
+                    "links": [
+                        13
+                    ],
+                    "slot_index": 0
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "VAEDecode"
+            }
+        },
+        {
+            "id": 10,
+            "type": "VHS_VideoCombine",
+            "pos": [
+                1260,
+                300
+            ],
+            "size": [
+                315,
+                290
+            ],
+            "flags": {},
+            "order": 9,
+            "mode": 0,
+            "inputs": [
+                {
+                    "name": "images",
+                    "type": "IMAGE",
+                    "link": 13
+                },
+                {
+                    "name": "audio",
+                    "type": "VHS_AUDIO",
+                    "link": 10
+                },
+                {
+                    "name": "meta_batch",
+                    "type": "VHS_BatchManager",
+                    "link": null
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "Filenames",
+                    "type": "VHS_FILENAMES",
+                    "links": null
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "VHS_VideoCombine"
+            },
+            "widgets_values": [
+                "Video2Video",
+                "video/h264-mp4",
+                false,
+                24,
+                "default",
+                "output",
+                true
+            ],
+            "title": "🎬 Save Video (giữ audio)"
+        }
+    ],
+    "links": [
+        [
+            1,
+            1,
+            0,
+            5,
+            0,
+            "IMAGE"
+        ],
+        [
+            2,
+            2,
+            0,
+            4,
+            1,
+            "MODEL"
+        ],
+        [
+            3,
+            2,
+            1,
+            6,
+            0,
+            "CLIP"
+        ],
+        [
+            4,
+            2,
+            1,
+            7,
+            0,
+            "CLIP"
+        ],
+        [
+            5,
+            2,
+            2,
+            5,
+            1,
+            "VAE"
+        ],
+        [
+            6,
+            5,
+            0,
+            8,
+            3,
+            "LATENT"
+        ],
+        [
+            7,
+            6,
+            0,
+            8,
+            1,
+            "CONDITIONING"
+        ],
+        [
+            8,
+            7,
+            0,
+            8,
+            2,
+            "CONDITIONING"
+        ],
+        [
+            9,
+            8,
+            0,
+            9,
+            0,
+            "LATENT"
+        ],
+        [
+            10,
+            1,
+            2,
+            10,
+            1,
+            "VHS_AUDIO"
+        ],
+        [
+            11,
+            3,
+            0,
+            4,
+            0,
+            "MOTION_MODEL_ADE"
+        ],
+        [
+            12,
+            4,
+            0,
+            8,
+            0,
+            "MODEL"
+        ],
+        [
+            13,
+            9,
+            0,
+            10,
+            0,
+            "IMAGE"
+        ]
+    ],
+    "groups": [
+        {
+            "title": "📹 INPUT VIDEO",
+            "bounding": [
+                40,
+                70,
+                350,
+                350
+            ],
+            "color": "#F59E0B"
+        },
+        {
+            "title": "🎬 ANIMATEDIFF",
+            "bounding": [
+                40,
+                560,
+                350,
+                220
+            ],
+            "color": "#EC4899"
+        },
+        {
+            "title": "🎨 STYLE TRANSFER",
+            "bounding": [
+                410,
+                220,
+                420,
+                290
+            ],
+            "color": "#3B82F6"
+        },
+        {
+            "title": "🎥 OUTPUT",
+            "bounding": [
+                1250,
+                170,
+                350,
+                450
+            ],
+            "color": "#10B981"
+        }
+    ],
+    "config": {},
+    "extra": {
+        "info": {
+            "name": "Video to Video Style Transfer",
+            "description": "Transform video style while preserving motion",
+            "denoise_guide": {
+                "0.3": "Subtle style change",
+                "0.5": "Balanced (recommended)",
+                "0.7": "Strong style change"
+            }
+        }
+    },
+    "version": 0.4
+}

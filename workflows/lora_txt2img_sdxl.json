@@ -1,0 +1,482 @@
+{
+    "last_node_id": 15,
+    "last_link_id": 18,
+    "nodes": [
+        {
+            "id": 1,
+            "type": "CheckpointLoaderSimple",
+            "pos": [
+                50,
+                200
+            ],
+            "size": [
+                315,
+                98
+            ],
+            "flags": {},
+            "order": 0,
+            "mode": 0,
+            "outputs": [
+                {
+                    "name": "MODEL",
+                    "type": "MODEL",
+                    "links": [
+                        1
+                    ],
+                    "slot_index": 0
+                },
+                {
+                    "name": "CLIP",
+                    "type": "CLIP",
+                    "links": [
+                        2,
+                        3
+                    ],
+                    "slot_index": 1
+                },
+                {
+                    "name": "VAE",
+                    "type": "VAE",
+                    "links": [
+                        4
+                    ],
+                    "slot_index": 2
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "CheckpointLoaderSimple"
+            },
+            "widgets_values": [
+                "sd_xl_base_1.0.safetensors"
+            ],
+            "title": "🎯 Load Model"
+        },
+        {
+            "id": 2,
+            "type": "LoraLoader",
+            "pos": [
+                50,
+                350
+            ],
+            "size": [
+                315,
+                126
+            ],
+            "flags": {},
+            "order": 1,
+            "mode": 0,
+            "inputs": [
+                {
+                    "name": "model",
+                    "type": "MODEL",
+                    "link": 1
+                },
+                {
+                    "name": "clip",
+                    "type": "CLIP",
+                    "link": 2
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "MODEL",
+                    "type": "MODEL",
+                    "links": [
+                        10
+                    ],
+                    "slot_index": 0
+                },
+                {
+                    "name": "CLIP",
+                    "type": "CLIP",
+                    "links": [
+                        11,
+                        12
+                    ],
+                    "slot_index": 1
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "LoraLoader"
+            },
+            "widgets_values": [
+                "your_lora.safetensors",
+                0.8,
+                0.8
+            ],
+            "title": "🔧 Load LoRA"
+        },
+        {
+            "id": 3,
+            "type": "CLIPTextEncode",
+            "pos": [
+                450,
+                100
+            ],
+            "size": [
+                400,
+                150
+            ],
+            "flags": {},
+            "order": 2,
+            "mode": 0,
+            "inputs": [
+                {
+                    "name": "clip",
+                    "type": "CLIP",
+                    "link": 11
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "CONDITIONING",
+                    "type": "CONDITIONING",
+                    "links": [
+                        5
+                    ],
+                    "slot_index": 0
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "CLIPTextEncode"
+            },
+            "widgets_values": [
+                "trigger_word, beautiful portrait, professional lighting, detailed face, sharp focus, masterpiece, 8k"
+            ],
+            "title": "✅ Positive Prompt (thêm trigger word)"
+        },
+        {
+            "id": 4,
+            "type": "CLIPTextEncode",
+            "pos": [
+                450,
+                300
+            ],
+            "size": [
+                400,
+                150
+            ],
+            "flags": {},
+            "order": 3,
+            "mode": 0,
+            "inputs": [
+                {
+                    "name": "clip",
+                    "type": "CLIP",
+                    "link": 12
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "CONDITIONING",
+                    "type": "CONDITIONING",
+                    "links": [
+                        6
+                    ],
+                    "slot_index": 0
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "CLIPTextEncode"
+            },
+            "widgets_values": [
+                "ugly, blurry, low quality, deformed, watermark, text, bad anatomy, bad hands"
+            ],
+            "title": "❌ Negative Prompt"
+        },
+        {
+            "id": 5,
+            "type": "EmptyLatentImage",
+            "pos": [
+                450,
+                500
+            ],
+            "size": [
+                315,
+                106
+            ],
+            "flags": {},
+            "order": 4,
+            "mode": 0,
+            "outputs": [
+                {
+                    "name": "LATENT",
+                    "type": "LATENT",
+                    "links": [
+                        7
+                    ],
+                    "slot_index": 0
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "EmptyLatentImage"
+            },
+            "widgets_values": [
+                1024,
+                1024,
+                1
+            ],
+            "title": "📐 Image Size"
+        },
+        {
+            "id": 6,
+            "type": "KSampler",
+            "pos": [
+                920,
+                150
+            ],
+            "size": [
+                315,
+                262
+            ],
+            "flags": {},
+            "order": 5,
+            "mode": 0,
+            "inputs": [
+                {
+                    "name": "model",
+                    "type": "MODEL",
+                    "link": 10
+                },
+                {
+                    "name": "positive",
+                    "type": "CONDITIONING",
+                    "link": 5
+                },
+                {
+                    "name": "negative",
+                    "type": "CONDITIONING",
+                    "link": 6
+                },
+                {
+                    "name": "latent_image",
+                    "type": "LATENT",
+                    "link": 7
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "LATENT",
+                    "type": "LATENT",
+                    "links": [
+                        8
+                    ],
+                    "slot_index": 0
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "KSampler"
+            },
+            "widgets_values": [
+                123456789,
+                "randomize",
+                30,
+                7.0,
+                "dpmpp_2m",
+                "karras",
+                1
+            ],
+            "title": "🎲 Sampler"
+        },
+        {
+            "id": 7,
+            "type": "VAEDecode",
+            "pos": [
+                1300,
+                150
+            ],
+            "size": [
+                210,
+                46
+            ],
+            "flags": {},
+            "order": 6,
+            "mode": 0,
+            "inputs": [
+                {
+                    "name": "samples",
+                    "type": "LATENT",
+                    "link": 8
+                },
+                {
+                    "name": "vae",
+                    "type": "VAE",
+                    "link": 4
+                }
+            ],
+            "outputs": [
+                {
+                    "name": "IMAGE",
+                    "type": "IMAGE",
+                    "links": [
+                        9
+                    ],
+                    "slot_index": 0
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "VAEDecode"
+            }
+        },
+        {
+            "id": 8,
+            "type": "SaveImage",
+            "pos": [
+                1300,
+                250
+            ],
+            "size": [
+                315,
+                270
+            ],
+            "flags": {},
+            "order": 7,
+            "mode": 0,
+            "inputs": [
+                {
+                    "name": "images",
+                    "type": "IMAGE",
+                    "link": 9
+                }
+            ],
+            "properties": {
+                "Node name for S&R": "SaveImage"
+            },
+            "widgets_values": [
+                "LoRA_Output"
+            ],
+            "title": "💾 Save Image"
+        }
+    ],
+    "links": [
+        [
+            1,
+            1,
+            0,
+            2,
+            0,
+            "MODEL"
+        ],
+        [
+            2,
+            1,
+            1,
+            2,
+            1,
+            "CLIP"
+        ],
+        [
+            4,
+            1,
+            2,
+            7,
+            1,
+            "VAE"
+        ],
+        [
+            5,
+            3,
+            0,
+            6,
+            1,
+            "CONDITIONING"
+        ],
+        [
+            6,
+            4,
+            0,
+            6,
+            2,
+            "CONDITIONING"
+        ],
+        [
+            7,
+            5,
+            0,
+            6,
+            3,
+            "LATENT"
+        ],
+        [
+            8,
+            6,
+            0,
+            7,
+            0,
+            "LATENT"
+        ],
+        [
+            9,
+            7,
+            0,
+            8,
+            0,
+            "IMAGE"
+        ],
+        [
+            10,
+            2,
+            0,
+            6,
+            0,
+            "MODEL"
+        ],
+        [
+            11,
+            2,
+            1,
+            3,
+            0,
+            "CLIP"
+        ],
+        [
+            12,
+            2,
+            1,
+            4,
+            0,
+            "CLIP"
+        ]
+    ],
+    "groups": [
+        {
+            "title": "📦 MODELS",
+            "bounding": [
+                40,
+                170,
+                350,
+                330
+            ],
+            "color": "#8B5CF6"
+        },
+        {
+            "title": "📝 PROMPTS",
+            "bounding": [
+                440,
+                70,
+                420,
+                400
+            ],
+            "color": "#3f789e"
+        },
+        {
+            "title": "🎨 GENERATION",
+            "bounding": [
+                910,
+                120,
+                350,
+                320
+            ],
+            "color": "#8A8"
+        }
+    ],
+    "config": {},
+    "extra": {
+        "info": {
+            "name": "LoRA Text to Image - SDXL",
+            "author": "ComfyUI Colab",
+            "description": "Workflow with LoRA support for custom styles"
+        }
+    },
+    "version": 0.4
+}
