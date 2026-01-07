@@ -35,4 +35,21 @@ Khi bạn gửi link này cho người khác hoặc dùng tài khoản Google kh
 3. Bấm **Mở trong Colab**.
 4. Khi Colab chạy, paste token đó vào (nếu họ chưa setup Secret).
 
-Code Colab đã được thiết kế để chạy độc lập với tài khoản người dùng!
+---
+
+## 💾 Dùng chung Dữ Liệu (1 Kho - Nhiều Thợ)
+
+Để tiết kiệm dung lượng và không phải tải lại Model cho từng tài khoản, hãy dùng **Shared Folder**:
+
+### Bước 1: Tài khoản CHÍNH (Kho chứa)
+1. Tạo thư mục `ComfyUI` trong Google Drive.
+2. Chuột phải > **Share** > Nhập email các tài khoản phụ.
+3. Quyền: **Editor** (Chỉnh sửa).
+
+### Bước 2: Tài khoản PHỤ (Người dùng)
+1. Vào Drive > **Shared with me** (Được chia sẻ với tôi).
+2. Tìm thư mục `ComfyUI`.
+3. Chuột phải > **Organize** > **Add shortcut to Drive** (Thêm lối tắt).
+4. Chọn lưu vào **My Drive** (Drive của tôi) > Add.
+
+👉 **Kết quả:** Colab ở tài khoản phụ sẽ nhìn thấy thư mục này như của chính mình. Mọi model tải về hay ảnh tạo ra đều nằm ở tài khoản Chính.
