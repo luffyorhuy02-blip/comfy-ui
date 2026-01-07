@@ -268,20 +268,48 @@
     </style>
     <script>
         function copyToken() {
-            var copyText = document.getElementById("cfToken");
-            copyText.select();
-            copyText.setSelectionRange(0, 99999);
-            navigator.clipboard.writeText(copyText.value);
-            var btn = document.getElementById("copyBtn");
-            var originalText = btn.innerHTML;
+            var input = document.getElementById("cfToken");
+            input.select();
+            input.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(input.value).then(function () {
+                var btn = document.getElementById("copyBtn");
+                btn.innerHTML = "✅ Đã Copy!";
+                btn.style.background = "#10b981";
+                setTimeout(function () {
+                    btn.innerHTML = "📋 Copy";
+                    btn.style.background = "";
+                }, 2000);
+            });
+        }
 
-            btn.innerHTML = "✅ Đã Copy!";
-            btn.style.background = "#10b981";
+        // Tự động Copy Token rồi mới mở Colab
+        function openWithToken(url) {
+            var input = document.getElementById("cfToken");
+            var token = input.value.trim();
 
-            setTimeout(function () {
-                btn.innerHTML = "📋 Copy";
-                btn.style.background = "";
-            }, 2000);
+            if (!token) {
+                alert("⚠️ Vui lòng hoàn tất Token trước khi mở Colab!");
+                input.focus();
+                return;
+            }
+
+            // Copy to clipboard
+            navigator.clipboard.writeText(token).then(function () {
+                // Visual feedback
+                var status = document.createElement("div");
+                status.style.cssText = "position:fixed; top:20px; left:50%; transform:translateX(-50%); background:#10b981; color:white; padding:15px 30px; border-radius:30px; z-index:9999; box-shadow:0 10px 25px rgba(0,0,0,0.5); font-weight:bold; font-size:1.1rem; animation: slideDown 0.5s ease-out forwards;";
+                status.innerHTML = "✅ Đã Copy Token! Hãy Paste vào Colab (Ctrl+V)";
+                document.body.appendChild(status);
+
+                // Open Colab
+                setTimeout(function () {
+                    window.open(url, '_blank');
+                    setTimeout(() => status.remove(), 3000);
+                }, 800);
+            }).catch(function (err) {
+                console.error('Không thể copy: ', err);
+                window.open(url, '_blank'); // Mở luôn nếu lỗi copy
+            });
         }
 
         window.onload = function () {
@@ -292,6 +320,19 @@
             }
         }
     </script>
+    <style>
+        @keyframes slideDown {
+            from {
+                top: -100px;
+                opacity: 0;
+            }
+
+            to {
+                top: 20px;
+                opacity: 1;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -332,10 +373,10 @@
                 <span class="badge">🔥 A100 Recommended</span>
                 <h2>⚡ ComfyUI Video Full</h2>
                 <p>Phiên bản PC mạnh nhất. Đầy đủ SVD, LTX-Video 2, AnimateDiff & VHS Nodes. Hỗ trợ Keep Alive.</p>
-                <a href="https://colab.research.google.com/github/luffyorhuy02-blip/comfy-ui/blob/main/comfyui_video_full.ipynb"
-                    target="_blank" class="btn-colab">
-                    ▶️ Khởi động
-                </a>
+                <div onclick="openWithToken('https://colab.research.google.com/github/luffyorhuy02-blip/comfy-ui/blob/main/comfyui_video_full.ipynb')"
+                    class="btn-colab" style="cursor: pointer;">
+                    ▶️ Khởi động (Auto Copy Token)
+                </div>
             </div>
 
             <!-- STANDARD -->
@@ -343,10 +384,10 @@
                 <span class="badge">T4 Compatible</span>
                 <h2>🛠️ ComfyUI Standard</h2>
                 <p>Bản chuẩn nhẹ nhàng. Tích hợp sẵn 11 Workflows cơ bản, ControlNet, IPAdapter. Phù hợp tạo ảnh.</p>
-                <a href="https://colab.research.google.com/github/luffyorhuy02-blip/comfy-ui/blob/main/comfyui_full_nodes.ipynb"
-                    target="_blank" class="btn-colab">
-                    ▶️ Khởi động
-                </a>
+                <div onclick="openWithToken('https://colab.research.google.com/github/luffyorhuy02-blip/comfy-ui/blob/main/comfyui_full_nodes.ipynb')"
+                    class="btn-colab" style="cursor: pointer;">
+                    ▶️ Khởi động (Auto Copy Token)
+                </div>
             </div>
         </div>
 
