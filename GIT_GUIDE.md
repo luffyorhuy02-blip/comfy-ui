@@ -37,7 +37,22 @@ git push -u origin main
 
 ---
 
-## 📦 Cập nhật code (sau khi đã setup)
+## �️ Công Cụ Tự Động (Scripts)
+
+Đã có sẵn các script để giúp bạn thao tác nhanh hơn:
+
+| File | Chức năng | Cách dùng |
+|------|-----------|-----------|
+| **`git_push.bat`** | Update code lên GitHub | Chạy file, nhập message |
+| **`git_pull.bat`** | Tải code mới về máy | Chạy file |
+| **`git_release.bat`** | Tạo phiên bản mới | Chạy file, nhập version (vd v1.0) |
+| **`git_reset.bat`** | ⚠️ Hủy thay đổi, quay về gốc | Chạy file (Cẩn thận!) |
+| **`colab_dashboard.html`** | Bảng điều khiển Notebooks | Mở bằng trình duyệt để vào nhanh Colab |
+
+
+---
+
+## �📦 Cập nhật code (sau khi đã setup)
 
 ```bash
 # 1. Xem files đã thay đổi
