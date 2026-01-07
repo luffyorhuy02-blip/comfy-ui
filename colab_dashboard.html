@@ -1,37 +1,84 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ComfyUI Colab Dashboard</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #1a1a1a; color: #fff; max-width: 800px; margin: 40px auto; padding: 20px; }
-        h1 { text-align: center; color: #4ade80; }
-        .card { background: #2d2d2d; padding: 20px; border-radius: 12px; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); transition: transform 0.2s; }
-        .card:hover { transform: translateY(-5px); background: #333; }
-        .btn { display: inline-block; background: #2563eb; color: white; padding: 10px 20px; text-decoration: none; border-radius: 6px; font-weight: bold; }
-        .btn:hover { background: #1d4ed8; }
-        .badge { background: #4b5563; padding: 4px 8px; border-radius: 4px; font-size: 0.8em; margin-left: 10px; }
-        .git-link { text-align: center; margin-top: 40px; }
-        .git-link a { color: #9ca3af; text-decoration: none; }
+        /* ... existing styles ... */
+        .token-box {
+            background: #374151;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border: 1px solid #4b5563;
+        }
+
+        .token-input {
+            width: 70%;
+            padding: 8px;
+            border-radius: 4px;
+            border: none;
+            background: #1f2937;
+            color: white;
+            margin-right: 10px;
+        }
+
+        .copy-btn {
+            background: #10b981;
+            cursor: pointer;
+            border: none;
+            padding: 8px 15px;
+            color: white;
+            border-radius: 4px;
+            font-weight: bold;
+        }
+
+        .copy-btn:active {
+            transform: scale(0.98);
+        }
     </style>
+    <script>
+        function copyToken() {
+            var copyText = document.getElementById("cfToken");
+            copyText.select();
+            copyText.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(copyText.value);
+            var btn = document.getElementById("copyBtn");
+            btn.innerHTML = "✅ Đã Copy!";
+            setTimeout(function () { btn.innerHTML = "📋 Copy Token"; }, 2000);
+        }
+    </script>
 </head>
+
 <body>
     <h1>🚀 ComfyUI Colab Dashboard</h1>
     <p style="text-align: center; color: #9ca3af;">Click để mở trực tiếp trong Google Colab</p>
+
+    <!-- TOKEN HELPER -->
+    <div class="token-box">
+        <h3 style="margin-top: 0; color: #60a5fa;">🔑 Cloudflare Token Helper</h3>
+        <p style="font-size: 0.9em; margin-bottom: 10px;">Dán Token của bạn vào đây để lưu tạm, sau đó bấm Copy trước
+            khi mở Colab:</p>
+        <input type="password" id="cfToken" class="token-input" placeholder="Dán Cloudflare Token của bạn vào đây...">
+        <button id="copyBtn" class="copy-btn" onclick="copyToken()">📋 Copy Token</button>
+    </div>
 
     <!-- FULL SETUP -->
     <div class="card" style="border-left: 5px solid #ec4899;">
         <h2>⚡ ComfyUI Video Full</h2>
         <p>Phiên bản đầy đủ nhất: SVD, LTX-Video 2, AnimateDiff, Keep Alive.</p>
-        <a href="https://colab.research.google.com/github/luffyorhuy02-blip/comfy-ui/blob/main/comfyui_video_full.ipynb" target="_blank" class="btn">▶️ Mở trong Colab</a>
+        <a href="https://colab.research.google.com/github/luffyorhuy02-blip/comfy-ui/blob/main/comfyui_video_full.ipynb"
+            target="_blank" class="btn">▶️ Mở trong Colab</a>
         <span class="badge">A100 Recommended</span>
     </div>
 
     <div class="card" style="border-left: 5px solid #f59e0b;">
         <h2>🛠️ ComfyUI Standard</h2>
         <p>Bản chuẩn: 11 workflows cơ bản, nhẹ hơn bản Video.</p>
-        <a href="https://colab.research.google.com/github/luffyorhuy02-blip/comfy-ui/blob/main/comfyui_full_nodes.ipynb" target="_blank" class="btn">▶️ Mở trong Colab</a>
+        <a href="https://colab.research.google.com/github/luffyorhuy02-blip/comfy-ui/blob/main/comfyui_full_nodes.ipynb"
+            target="_blank" class="btn">▶️ Mở trong Colab</a>
         <span class="badge">T4 GPU OK</span>
     </div>
 
@@ -41,17 +88,20 @@
     <div class="card">
         <h3>🧠 Train LoRA</h3>
         <p>Huấn luyện model LoRA cho SDXL/SD1.5 với dataset của bạn.</p>
-        <a href="https://colab.research.google.com/github/luffyorhuy02-blip/comfy-ui/blob/main/train_image_lora.ipynb" target="_blank" class="btn">▶️ Mở Notebook</a>
+        <a href="https://colab.research.google.com/github/luffyorhuy02-blip/comfy-ui/blob/main/train_image_lora.ipynb"
+            target="_blank" class="btn">▶️ Mở Notebook</a>
     </div>
 
     <div class="card">
         <h3>🗣️ Voice Cloning (RVC)</h3>
         <p>Clone giọng nói và tạo model RVC.</p>
-        <a href="https://colab.research.google.com/github/luffyorhuy02-blip/comfy-ui/blob/main/clone_voice_rvc.ipynb" target="_blank" class="btn">▶️ Mở Notebook</a>
+        <a href="https://colab.research.google.com/github/luffyorhuy02-blip/comfy-ui/blob/main/clone_voice_rvc.ipynb"
+            target="_blank" class="btn">▶️ Mở Notebook</a>
     </div>
 
     <div class="git-link">
         <a href="https://github.com/luffyorhuy02-blip/comfy-ui" target="_blank">📂 Xem GitHub Repository</a>
     </div>
 </body>
+
 </html>
